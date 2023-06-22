@@ -26,5 +26,14 @@ class PS {
   }
 }
 
-const PubSub = new PS();
-export default PubSub;
+let PubSub = null;
+
+const getPubSub = () => {
+  if (!PubSub) {
+    PubSub = new PS();
+    return PubSub;
+  }
+  return PubSub;
+};
+
+export default getPubSub();
