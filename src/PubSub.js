@@ -1,18 +1,28 @@
 class PS {
   constructor() {
-    this.listeners = [];
+    this.listeners = {};
   }
 
-  publish(msg) {
-    this.listeners.forEach((ls) => {
-      ls(msg);
+  publish(topic, payload) {
+    if (!this.listeners[topic]) {
+      return;
+    }
+
+    this.listeners[topic].forEach((listener) => {
+      listener(payload);
     });
   }
 
-  subscribe(ls) {
-    if (typeof ls === 'function') {
-      this.listeners.push(ls);
+  subscribe(topic, listener) {
+    if (!topic || !listener || typeof listener !== 'function') {
+      return;
     }
+    this.listeners[topic] = this.listeners[topic] || [];
+    this.listeners[topic].push(listener);
+  }
+
+  unsubscribe(topic) {
+    delete this.listeners[topic];
   }
 }
 
